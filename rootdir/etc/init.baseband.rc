@@ -22,22 +22,20 @@ on fs
 # MIF
     chown radio radio /sys/devices/virtual/misc/multipdp/waketime
     chmod 0660 /sys/devices/virtual/misc/umts_dm0/dm_state
-    chown radio system /sys/devices/virtual/misc/umts_dm0/dm_state
-    chown radio system /efs
-    chmod 0771 /efs
-
-on early-boot
-# Assign TCP buffer thresholds to be ceiling value of technology maximums
-# Increased technology maximums should be reflected here.
-    write /proc/sys/net/core/rmem_max 2097152
-    write /proc/sys/net/core/wmem_max 2097152		
+    chown radio system /sys/devices/virtual/misc/umts_dm0/dm_state	
 
 # CP Boot Daemon (CBD)
-service cpboot-daemon /vendor/bin/hw/cbd -d -t ss300 -b s -m l -p 13
+service cpboot-daemon /vendor/bin/cbd -d -t ss300 -b s -m l -p 13
     class main
     user root
-    group radio cache inet misc audio sdcard_rw log sdcard_r shell
+    group radio cache inet misc audio sdcard_r sdcard_rw log shell
 
 on property:persist.sys.cpboot=disable
     stop cpboot-daemon
-    stop ril-daemon
+    stop vendor.ril-daemon
+
+on property:ro.debug_level=0x494d
+	write /d/tracing/buffer_size_kb 1408
+    write /d/tracing/events/modem_if/mif_log/enable 1
+    write /d/tracing/tracing_on 1
+    write /sys/module/modem_utils/parameters/dflags 13
