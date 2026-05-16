@@ -24,4 +24,4 @@ PRODUCT_PACKAGES += \
 $(call inherit-product, device/samsung/skt-common/device.mk)
 	
 # call the proprietary setup
-$(call inherit-product, vendor/samsung/treltexx/treltexx-vendor.mk)
+$(call inherit-product, vendor/samsung/trelte/trelte-vendor.mk)
